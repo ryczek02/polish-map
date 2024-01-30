@@ -13,6 +13,13 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return phpversion();
+Route::get('/', function (\Illuminate\Http\Request $request) {
+
+    if ($request->has('search')) {
+        $voivodeships = \App\Models\City::search($request->search)->paginate(5);
+    }else{
+        $voivodeships = \App\Models\City::query()->paginate(5);
+    }
+
+    return $voivodeships;
 });
