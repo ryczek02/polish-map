@@ -3,6 +3,13 @@
 namespace App\Providers;
 
 use App\Models\City;
+use App\Models\County;
+use App\Models\District;
+use App\Models\Voivodeship;
+use App\Observers\CityObserver;
+use App\Observers\CountyObserver;
+use App\Observers\DistrictObserver;
+use App\Observers\VoivodeshipObserver;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Auth\Listeners\SendEmailVerificationNotification;
 use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
@@ -25,7 +32,10 @@ class EventServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-
+        City::observe(CityObserver::class);
+        County::observe(CountyObserver::class);
+        District::observe(DistrictObserver::class);
+        Voivodeship::observe(VoivodeshipObserver::class);
     }
 
     /**
