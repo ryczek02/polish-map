@@ -26,10 +26,15 @@ class City extends Model
 
     public function toSearchableArray(): array
     {
-        return $this->with('county')
-            ->where('id', '=', $this->id)
-            ->first()
-            ->toArray();
+        $this->loadMissing('county');
+
+        return [
+            'name' => $this->name,
+            'lon' => $this->lon,
+            'lat' => $this->lat,
+            'county_name' => $this->county->name,
+            'voivodeship_name' => $this->county->voivodeship->name,
+        ];
     }
 
     public function county(): BelongsTo

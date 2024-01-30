@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\City;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -15,11 +16,18 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/', function (\Illuminate\Http\Request $request) {
 
-    if ($request->has('search')) {
-        $voivodeships = \App\Models\City::search($request->search)->paginate(5);
-    }else{
-        $voivodeships = \App\Models\City::query()->paginate(5);
+    if (!$request->has('city')) {
+        return [
+            'info' => 'Use as localhost:80?city=Sędziszów'
+        ];
     }
 
-    return $voivodeships;
+    $cities = City::search($request->city)->paginate(5);
+    foreach($cities as $city){
+        $city['percent_match'] = $city->getScoutKey() / 10;
+    }
+
+    return $cities;
+
+
 });
